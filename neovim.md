@@ -335,3 +335,36 @@ vim.cmd.colorscheme "catppuccin"
 
 Para que los cambios surtan efecto, reiniciamos Neovim.
 
+## *Fuzzy finder*
+
+Para encontrar un fichero cuyo nombre (o contenido) coincide con una determinada cadena, instalamos [Telescope](https://github.com/nvim-telescope/telescope.nvim).
+
+Como en los casos anteriores, añadimos el siguiente bloque a la tabla de *plugins* de *lazy.nvim*:
+
+```lua
+{
+    'nvim-telescope/telescope.nvim', tag = '0.1.5',
+    dependencies = { 'nvim-lua/plenary.nvim' }
+}
+```
+
+Si reiniciamos Lazy.nvim, el paquete de Telescope se instalará, pero tenemos que configurarlo antes de poder usarlo.
+
+```lua
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+```
+
+Como vemos, la configuración para invocar *telescope* es, en modo *normal*, pulsamos la tecla *leader* seguida de `ff` para encontrar ficheros, mientras que *live grep* nos permite buscar la cadena proporcionada en el **contenido** de los ficheros.
+
+> Por defecto, la tecla *leader* es la `\`, lo que es bastante incómodo; por ello, muchos usuarios de (Neo)Vim la cambian por ` ` (espacio) o `,`.
+
+La manera de establecer la tecla *leader* es mediante:
+
+```lua
+vim.g.mapleader = ','
+```
+
