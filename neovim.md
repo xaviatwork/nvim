@@ -448,3 +448,8 @@ Una vez hecho el cambio, reiniciamos Neovim para comprobar que todo sigue funcio
 
 > Para evitar tener que ir creando enlaces a cada fichero, hemos elimiando el enlace simbólico existente y lo hemos reemplazado por `ln -s ~/repos/nvim ~/..config/nvim`.
 
+Todavía mejor, en la documentación se indica que si estructuramos los ficheros en el sistema de ficheros de una determinada manera (que es la que espera *lazy.nvim*), *lazy.nvim* se encargará de autocargar la configuración automáticamente cada vez que cambie.
+La única condición es que todos estos ficheros deben devolver una *tabla* Lua con la configuración, de manera que *lazy.nvim* pueda fusionarlas todas en una sola *tabla*.
+
+Esta carpeta es `.config/nvim/lua/plugins/`; los *plugins* puede cargarse entonces mediante `require("lazy").setup("plugins")`.
+
