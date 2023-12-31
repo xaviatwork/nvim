@@ -288,3 +288,27 @@ Después de *source*ar el fichero de configuración, vemos que se ha aplicado la
 > Para ejecutar la macro usaré `@a`, pero como quiero hacerlo tres veces (para las tres líneas que faltan por editar, pulso `3@a`.
 > Grabo los cambios con `ESC, :w` y me maravillo del trabajo bien hecho.
 
+## Instala un gestor de paquetes
+
+Hay dos grandes gestores de paquetes/módulos en Neovim: Packer y Lazy.nvim.
+
+En este caso, instalo [lazy.nvim](https://github.com/folke/lazy.nvim).
+
+Para hacerlo, copiamos el bloque de código Lua proporcionado en la página del proyecto y lo pegamos en el fichero `init.lua`.
+
+Para *activar* el módulo, tenemos que usar la función `require`. Pero antes, debemos definir dos variables: `plugins` y `opts` para la función `setup`.
+
+Como estas variables no están definidas, las inicializamos (vacías) antes de invocar la función de `setup`:
+
+```lua
+local plugins = {}
+local opts = {}
+
+require("lazy").setup(plugins, opts)
+```
+
+Tras guardar el fichero, ejecutamos `source %` y observamos que tras ello, tenemos disponible el comando `:Lazy`.
+
+Si ejecutamos el comando, se muestra la GUI de Lazy (para salir, `:q`).
+Esto valida que Lazy.nvim está instalado correctamente en nuestro sistema y que podemos usarlo para instalar paquetes.
+
