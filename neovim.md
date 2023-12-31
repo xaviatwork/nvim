@@ -312,3 +312,26 @@ Tras guardar el fichero, ejecutamos `source %` y observamos que tras ello, tenem
 Si ejecutamos el comando, se muestra la GUI de Lazy (para salir, `:q`).
 Esto valida que Lazy.nvim está instalado correctamente en nuestro sistema y que podemos usarlo para instalar paquetes.
 
+## Instalar un *theme*
+
+Vamos a instalar el *theme* [catppuccin](https://github.com/catppuccin/nvim).
+La instalación consiste en añadir el nombre del módulo en la *tabla* de *plugins* de `lazy.nvim`, para que el gestor de paquetes lo instale (si no está ya instalado).
+
+```lua
+local plugins = {
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 }
+}
+```
+
+Para usar el *theme* no es necesario ejectuar `require`, ya que el *theme* puede funcionar perfectamente sin ningún tipo de configuración.
+Sin embargo, quiero incluir la función de `setup` porque seguramente querré cambiar algunos aspectos del *theme* más adelante.
+
+```lua
+require("catppuccin").setup({
+  flavour = "macchiato"
+})
+vim.cmd.colorscheme "catppuccin"
+```
+
+Para que los cambios surtan efecto, reiniciamos Neovim.
+
