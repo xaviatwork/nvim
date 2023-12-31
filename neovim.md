@@ -395,3 +395,56 @@ Indicamos que queremos *highlight* e *indent* habilitado.
 
 Ahora mismo, sólo está habilitado para los lenguajes de programación indicados, pero podemos añadir nuevos *parsers* para otros lenguajes que nos interesen con sólo incluirlos en la lista de `ensure_installed`.
 
+## Explorador de ficheros
+
+El siguiente módulo a instalar en un explorador de ficheros. Tenemos dos grandes alternativas: `neo-tree` o `nvim-tree`, pero vamos a usar [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim).
+
+Como en casos anteriores, vamos a copiar y pegar el *snippet* facilitado por el equipo del proyecto:
+
+```lua
+{
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+        "MunifTanjim/nui.nvim",
+    }
+}
+```
+
+*neo-tree* tiene varias dependencias; algunas de ellas ya están instaladas. En el caso de `nvim-web-devicons` se trata de los iconos incluidos en las fuentes *nerd* parcheadas.
+
+Reiniciamos Neovim para que se instale *neo-tree*.
+
+El siguiente paso es configurar Neo-tree para que se muestre al pulsar alguna tecla, de manera que no se muestre todo el tiempo, por ejemplo.
+
+En vez de tener que introducir el comando `Neotree` seguido del resto de parámetros cada vez, establecemos una combinación de teclas para ello.
+
+En mi caso, me gustaría tener el explorar centrado en la pantalla (cuando lo necesito) y que al volver al pulsar la combinación de teclas, se oculte.
+La configuración es:
+
+```lua
+vim.keymap.set('n', '<C-b>', ':Neotree filesystem reveal float toggle<CR>')
+```
+
+Una vez tenemos un explorador de ficheros, tenemos la herramienta para pasar al siguiente nivel: organizar la configuración de Neovim en múltiples ficheros.
+Lazy tiene la capacidad de autocargar los ficheros que se encuentren en `.config/lua/plugins.lua` o `.config/lua/plugins/init.lua`, siempre que el contenido *devuelva* una *tabla* de configuración. De esta forma, *lazy* fusiona todas las configuraciones en una sola *tabla* de Lua.
+
+De esta forma podemos fragmentar el fichero `init.lua` en el que hemos estado trabajando y donde tenemos la configuración de múltiples módulos mezclada en ficheros independientes.
+
+Y eso es lo que vamos a hacer a continuación.
+
+La idea es coger la *table* de *plugins* y moverla a su propio fichero `.config/lua/plugins.lua`.
+
+Una vez tenemos el bloque de *plugins*, reemplazamos `local plugins` por `return`, para devolver la *table*.
+En el fichero `init.lua` actualizamos la función `require`:
+
+```lua
+require("lazy").setup("plugins")
+```
+
+Una vez hecho el cambio, reiniciamos Neovim para comprobar que todo sigue funcionando sin problemas.
+
+> Para evitar tener que ir creando enlaces a cada fichero, hemos elimiando el enlace simbólico existente y lo hemos reemplazado por `ln -s ~/repos/nvim ~/..config/nvim`.
+

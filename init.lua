@@ -19,17 +19,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local plugins = {
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-  {
-    'nvim-telescope/telescope.nvim', tag = '0.1.5',
-    dependencies = { 'nvim-lua/plenary.nvim' }
-  },
-  {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"}
-}
 local opts = {}
 
-require("lazy").setup(plugins, opts)
+require("lazy").setup("plugins")
 
 require("catppuccin").setup({
   flavour = "mocha"
@@ -44,7 +36,9 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 local configs = require("nvim-treesitter.configs")
 configs.setup({
   ensure_installed = { "lua", "bash", "go" },
-  sync_install = false,
   highlight = { enable = true },
   indent = { enable = true }  
 })
+
+-- Neo-tree
+vim.keymap.set('n', '<C-b>', ':Neotree filesystem reveal float toggle<CR>')
