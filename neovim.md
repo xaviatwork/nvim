@@ -368,3 +368,30 @@ La manera de establecer la tecla *leader* es mediante:
 vim.g.mapleader = ','
 ```
 
+## Resaltado de sintaxis y ajuste de indentación con Treesitter
+
+Vamos a usar *lazy.nvim* para descargar el módulo de [treesitter.nvim](https://github.com/nvim-treesitter/nvim-treesitter/wiki/Installation).
+
+Empezamos añadiendo *nvim-treesitter* a la tabla de *plugins* de *lazy.nvim*:
+
+```lua
+{"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"}
+```
+
+A continuación reiniciamos Neovim para que *lazy.nvim* descargue el módulo antes de empezar a configurarlo.
+Una vez instalado, lo configuramos de manera similar a los anteriores *plugins*;
+
+```lua
+-- Treesitter
+local configs = require("nvim-treesitter.configs")
+configs.setup({
+  ensure_installed = { "lua", "bash", "go" },
+  highlight = { enable = true },
+  indent = { enable = true }  
+})
+```
+
+Indicamos que queremos *highlight* e *indent* habilitado.
+
+Ahora mismo, sólo está habilitado para los lenguajes de programación indicados, pero podemos añadir nuevos *parsers* para otros lenguajes que nos interesen con sólo incluirlos en la lista de `ensure_installed`.
+
