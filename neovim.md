@@ -28,5 +28,23 @@ Test that everything works by running `nvim`.
 
 Exit `nvim` by pressing `ESC+:q`.
 
+## Instalación de una fuente parcheada (*nerd fonts*)
 
+Algunas de las configuraciones de Neovim usan fuentes *nerd* para mostrar iconos. Es recomendable instalar alguna de estas fuentes para aprovechar esta funcionalidad (estética).
+
+Creamos la carpeta de destino para alojar las fuentes parcheadas:
+
+```console
+mkdir -p ~/.local/share/fonts  
+```
+
+Después, descomprime la(s) fuente(s) en la carpeta de destino.
+
+Finalmente, actualiza la *cache*:
+
+```console
+fc-cache -fv
+```
+
+Configura la consola para utilizar tu fuente *nerd* preferida.
 
