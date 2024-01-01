@@ -500,3 +500,8 @@ Reiniciamos Neovim para validar que el tema sigue aplicándose.
 
 Aplicaremos este patrón a todos los *plugins* que tenemos instalados.
 
+Finalmente, copiamos los comandos de configuración de Vim a un fichero en la carpeta `.config/nvim/lua` y lo *requerimos* mediante `require("vim-config")`.
+
+Como hemos movido todos los ficheros de `plugins.lua` a sus respectivas configuraciones en la carpeta `plugins/`, ya podemos eliminarlo.
+
+
