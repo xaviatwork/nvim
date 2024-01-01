@@ -7,7 +7,7 @@ La instalación de Neovim se puede realizar a través del gestor de paquetes de 
 > En general, las versiones de Neovim en los gestores de paquetes de las distribuciones están **muy por detrás** de las versiones disponibles en la página del proyecto. Por ejemplo, en Ubuntu 20.04 LTS, la versión disponible es `neovim/focal 0.4.3-3 amd64`, mientras que la última versión disponible desde la página del proyecto es 0.9.5.
 
 ```console
-curl -JLO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+`curl -JLO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz`
 ```
 
 Descomprime el paquete (por ejemplo, en ~/App/neovim):
@@ -448,8 +448,59 @@ Una vez hecho el cambio, reiniciamos Neovim para comprobar que todo sigue funcio
 
 > Para evitar tener que ir creando enlaces a cada fichero, hemos elimiando el enlace simbólico existente y lo hemos reemplazado por `ln -s ~/repos/nvim ~/..config/nvim`.
 
-Todavía mejor, en la documentación se indica que si estructuramos los ficheros en el sistema de ficheros de una determinada manera (que es la que espera *lazy.nvim*), *lazy.nvim* se encargará de autocargar la configuración automáticamente cada vez que cambie.
-La única condición es que todos estos ficheros deben devolver una *tabla* Lua con la configuración, de manera que *lazy.nvim* pueda fusionarlas todas en una sola *tabla*.
+## La carpeta `plugins`
 
-Esta carpeta es `.config/nvim/lua/plugins/`; los *plugins* puede cargarse entonces mediante `require("lazy").setup("plugins")`.
+En la documentación de *lazy.nvim* podemos encontrar que, si colocamos ficheros Lua que devuelvan una *table* de configuración, *Lazy.nvim* puede fusionar todas las configuraciones en una sola, aunque esté repartida en múltiples ficheros.
+
+Además, *Lazy.nvim* monitoriza la carpeta *plugins* de manera que recarga automáticamente los ficheros si hay cambios.
+
+Ésto nos va a permitir fragmentar y organizar mucho mejor la configuración de Neovim.
+
+Creamos la carpeta desde el explorador de ficheros de Neovim pulsando `a`.
+
+Dentro de la carpeta `plugins/`, vamos a copiar en un fichero llamado `catppuccin.lua` la tabla correspondiente al plugin de Catppuccin (del fichero `plugins.lua`).
+
+Una vez copiado, eliminamos el plugin de `catppuccin` de `plugins.lua` y reiniciamos Neovim para validar que todo sigue funcionando correctamente.
+
+El problema es que ahora tenemos configuración del *plugin* de *Catppuccin* tanto en el fichero `init.lua` como en el específico que hemos creado.
+
+*Lazy.nvim* tiene una variable llamada `config`, que se carga cuando se inicializa el *plugin* y que automáticamente llama a `setup`.
+
+Esto significa que no necesitamos la línea:
+
+```lua
+require("catppuccin").setup({
+```
+
+La idea es crear una función en Lua, que se ejecuta cuando se realiza el *setup* y que establece, en este caso, el tema en Neovim.
+
+En el fichero `catppuccin.lua` añadimos una propiedad adicional llamada `config` que llama a una función:
+
+```lua
+config = function ()
+         end
+```
+
+Y en el cuerpo de la función, copiamos el *require* y el *vim.cmd* que establece el tema.
+
+> Eliminamos la función `setup` porque `config` llama automáticamente a `setup`. Por el camino hemos perdido la capacidad de pasar parámetros a `setup`, pero veremos cómo hacerlo más adelante:
+
+```lua
+return  { 
+  "catppuccin/nvim",
+  name = "catppuccin",
+  priority = 1000,
+  config = function()
+    vim.cmd.colorscheme "catppuccin"
+  end
+}
+```
+
+Reiniciamos Neovim para validar que el tema sigue aplicándose.
+
+Aplicaremos este patrón a todos los *plugins* que tenemos instalados.
+
+Finalmente, copiamos los comandos de configuración de Vim a un fichero en la carpeta `.config/nvim/lua` y lo *requerimos* mediante `require("vim-config")`.
+
+Como hemos movido todos los ficheros de `plugins.lua` a sus respectivas configuraciones en la carpeta `plugins/`, ya podemos eliminarlo.
 
